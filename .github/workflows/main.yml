@@ -1,0 +1,36 @@
+name: Check URL Status
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"  # Every 15 minutes
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  check-status:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Check Website Status
+      run: |
+        STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}" https://procryptoflashers.vercel.app/)
+        CURRENT_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        if [ "$STATUS_CODE" -eq 200 ]; then
+          echo "Website is up! Status Code: 200"
+          echo "Status: 200 OK" > last_check.txt
+          echo "Check Time: $CURRENT_TIME" >> last_check.txt
+        else
+          echo "Website is down. Status Code: $STATUS_CODE"
+          echo "Status: Down" > last_check.txt
+          echo "Check Time: $CURRENT_TIME" >> last_check.txt
+        fi
+
+    - name: Commit and Push Status
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add last_check.txt
+        git commit -m "Update website status"
+        git push
