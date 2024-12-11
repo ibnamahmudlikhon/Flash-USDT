@@ -34,7 +34,3 @@ We automatically check the website every 15 minutes. The status below will updat
 ## 📱 Join the Community
 For support and updates, join us on Telegram:  
 [Pro Crypto Flashers Telegram](https://t.me/ProCryptoFlashers)
-
----
-
-**Created by**: [Likhon Sheikh](https://github.com/ibnamahmudlikhon)
